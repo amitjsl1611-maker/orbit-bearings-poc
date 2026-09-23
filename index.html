@@ -626,7 +626,7 @@
   }
 
   .ass-section-title strong {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   /* ── Wrapper (creates scroll height) ── */
@@ -1404,8 +1404,8 @@
 
   function loop() {
     readScroll();
-    if (prefersReduced) {
-      p = rawP;
+    if (prefersReduced || snapAnimating) {
+      p = rawP; // track directly during snap — no double-smoothing
     } else {
       p += (rawP - p) * LERP;
     }
@@ -1419,10 +1419,10 @@
   loop();
 
   /* ── Snap animation ── */
-  let snapAnimating  = false;
-  let snapRaf        = null;
-  let cooldownTimer  = null;
-  let postCooldown   = false;
+  let snapAnimating = false;
+  let snapRaf       = null;
+  let snapLocked    = false;
+  let snapLockTimer = null;
 
   function easeInOutCubic(t) {
     return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
@@ -1430,7 +1430,7 @@
 
   function snapToStep(idx) {
     idx = Math.max(0, Math.min(N - 1, idx));
-    if (snapAnimating) return; // never cancel a running snap
+    if (snapLocked) return;
 
     const wTop   = wrapper.getBoundingClientRect().top + window.scrollY;
     const target = wTop + idx * stepPx;
@@ -1438,9 +1438,11 @@
     const dist   = target - start;
     if (Math.abs(dist) < 2) return;
 
-    const dur = 520;
+    const dur = 380;
     const t0  = performance.now();
     snapAnimating = true;
+    snapLocked    = true;
+    clearTimeout(snapLockTimer);
 
     function tick(now) {
       const t = Math.min((now - t0) / dur, 1);
@@ -1449,10 +1451,8 @@
         snapRaf = requestAnimationFrame(tick);
       } else {
         snapAnimating = false;
-        // hold a post-animation cooldown so trailing wheel events don't chain
-        postCooldown = true;
-        clearTimeout(cooldownTimer);
-        cooldownTimer = setTimeout(() => { postCooldown = false; }, 500);
+        // debounce: extend lock on every incoming wheel event until scroll goes quiet
+        snapLockTimer = setTimeout(() => { snapLocked = false; }, 200);
       }
     }
     snapRaf = requestAnimationFrame(tick);
@@ -1474,12 +1474,11 @@
 
     e.preventDefault();
 
-    // While animating or in post-snap cooldown, extend the cooldown window
-    // on every incoming wheel event (debounce) so a fast gesture can't slip through
-    if (snapAnimating || postCooldown) {
-      if (postCooldown) {
-        clearTimeout(cooldownTimer);
-        cooldownTimer = setTimeout(() => { postCooldown = false; }, 500);
+    // Extend the quiet-period window on every wheel event that arrives while locked
+    if (snapLocked) {
+      if (!snapAnimating) {
+        clearTimeout(snapLockTimer);
+        snapLockTimer = setTimeout(() => { snapLocked = false; }, 200);
       }
       return;
     }
