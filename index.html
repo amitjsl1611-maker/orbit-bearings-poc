@@ -600,10 +600,13 @@
 
   /* ── Section header ── */
   .ass-section-header {
-    position: relative;
-    z-index: 150;
-    background: var(--ass-bg);
-    padding: 96px var(--side) 64px;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    text-align: center;
+    pointer-events: none;
   }
 
   .ass-section-eyebrow {
@@ -612,15 +615,14 @@
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--ass-muted);
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
 
   .ass-section-title {
-    font-size: clamp(32px, 3.8vw, 60px);
+    font-size: clamp(28px, 3vw, 48px);
     font-weight: 300;
-    line-height: 1.08;
+    line-height: 1.1;
     color: var(--ass-ink);
-    max-width: 560px;
   }
 
   .ass-section-title strong {
@@ -712,7 +714,7 @@
   /* ── Text column ── */
   .ass-text-col {
     position: absolute;
-    left: 31vw;
+    left: 26vw;
     top: 50%;
     width: 36vw;
   }
@@ -770,7 +772,7 @@
   /* ── Image column ── */
   .ass-image-col {
     position: absolute;
-    left: 70vw;
+    left: 66vw;
     top: 50%;
     width: 24vw;
   }
@@ -804,7 +806,7 @@
 
   /* ── Mobile layout ── */
   @media (max-width: 767px) {
-    .ass-section-header { padding: 64px var(--side) 40px; }
+    .ass-section-header { top: 24px; }
 
     .ass-svg { display: none; }
 
@@ -1132,13 +1134,12 @@
 <!-- ════════════════════════════════════
      2ND FOLD — ARC SCROLL STEPPER
 ════════════════════════════════════ -->
-<section class="ass-section-header">
-  <p class="ass-section-eyebrow">Our Engineering Process</p>
-  <h2 class="ass-section-title">Precision at every<br><strong>stage of production.</strong></h2>
-</section>
-
 <div id="assWrapper" class="ass-wrapper">
   <div id="assStage" class="ass-stage" tabindex="0" role="region" aria-label="Engineering process steps">
+    <div class="ass-section-header">
+      <p class="ass-section-eyebrow">Our Engineering Process</p>
+      <h2 class="ass-section-title">Precision at every<br><strong>stage of production.</strong></h2>
+    </div>
     <svg id="assSvg" class="ass-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
     <div id="assNodes" class="ass-nodes-layer"></div>
     <div id="assTextCol" class="ass-text-col"></div>
@@ -1187,13 +1188,6 @@
       tags: ['CMM Inspection', 'Vibration Testing', 'Fatigue Life'],
       image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Quality', alt: 'Quality Assurance' }
     },
-    {
-      eyebrow: 'STEP 05',
-      title: 'Global\nDelivery',
-      description: 'From our manufacturing hubs to your facility, our logistics network ensures on-time delivery with full component traceability and ongoing application support.',
-      tags: ['Global Logistics', 'Traceability', 'After-Sales'],
-      image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Delivery', alt: 'Global Delivery' }
-    }
   ];
 
   const N = STEPS.length;
@@ -1317,9 +1311,9 @@
   let R, cx, cy, stepPx, circumference, stepLen;
 
   function recompute() {
-    R             = 0.32 * window.innerWidth;
-    cx            = 0.20 * window.innerWidth - R;
-    cy            = window.innerHeight / 2;
+    R             = 0.22 * window.innerWidth;
+    cx            = 0.17 * window.innerWidth - R;
+    cy            = window.innerHeight * 0.58;
     stepPx        = (STEP_SCROLL_VH / 100) * window.innerHeight;
     circumference = 2 * Math.PI * R;
     stepLen       = circumference * STEP_ANGLE / 360;
