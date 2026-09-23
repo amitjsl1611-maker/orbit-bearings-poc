@@ -1451,8 +1451,8 @@
         snapRaf = requestAnimationFrame(tick);
       } else {
         snapAnimating = false;
-        // debounce: extend lock on every incoming wheel event until scroll goes quiet
-        snapLockTimer = setTimeout(() => { snapLocked = false; }, 200);
+        // Fixed cooldown — no debouncing, so direction-change scrolls aren't blocked
+        snapLockTimer = setTimeout(() => { snapLocked = false; }, 320);
       }
     }
     snapRaf = requestAnimationFrame(tick);
@@ -1474,14 +1474,7 @@
 
     e.preventDefault();
 
-    // Extend the quiet-period window on every wheel event that arrives while locked
-    if (snapLocked) {
-      if (!snapAnimating) {
-        clearTimeout(snapLockTimer);
-        snapLockTimer = setTimeout(() => { snapLocked = false; }, 200);
-      }
-      return;
-    }
+    if (snapLocked) return;
 
     snapToStep(current + dir);
   }, { passive: false });
