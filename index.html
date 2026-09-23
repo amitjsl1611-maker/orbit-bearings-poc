@@ -1147,6 +1147,353 @@
   </div>
 </div>
 
+<!-- ════════════════════════════════════
+     3RD FOLD — INDUSTRY SHOWCASE
+════════════════════════════════════ -->
+
+<style>
+  /* ── Industry Showcase ── */
+  .scroll-showcase {
+    position: relative;
+    padding-top: 140px;
+    padding-bottom: 40px;
+    background: #F2F0EC;
+    z-index: 5;
+  }
+
+  .ss-header-block {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 10;
+    background: #F2F0EC;
+    padding: 40px 7vw 28px;
+  }
+
+  .ss-section-eyebrow-ind {
+    display: block;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #C40000;
+    margin-bottom: 18px;
+  }
+
+  .showcase-header-title {
+    font-family: 'Public Sans', sans-serif;
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #171512;
+    margin: 0;
+  }
+
+  .sh-word {
+    display: inline;
+    color: #171512;
+    transition: color 0.45s ease;
+  }
+
+  .sh-word.active { color: #C40000; }
+
+  .ss-card {
+    display: flex;
+    align-items: center;
+    min-height: 90vh;
+    padding: 60px 7vw;
+  }
+
+  .ss-card-left {
+    width: 44%;
+    padding-right: 2vw;
+  }
+
+  .ss-eyebrow {
+    display: block;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #C40000;
+    margin-bottom: 18px;
+  }
+
+  .ss-title {
+    font-family: 'Public Sans', sans-serif;
+    font-size: clamp(32px, 3.6vw, 48px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+    color: #171512;
+    margin: 0 0 16px;
+    max-width: 500px;
+  }
+
+  .ss-desc {
+    font-family: 'Public Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: #6A655D;
+    margin: 0 0 20px;
+  }
+
+  .ss-body {
+    font-family: 'Public Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #6A655D;
+    max-width: 400px;
+    margin: 0 0 28px;
+  }
+
+  .ss-cta {
+    display: inline-block;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #171512;
+    border: 1px solid #D9D5CD;
+    padding: 10px 22px;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: border-color 0.25s, color 0.25s;
+  }
+
+  .ss-cta:hover {
+    border-color: #C40000;
+    color: #C40000;
+  }
+
+  /* Fixed image panel */
+  .ss-img-panel {
+    position: fixed;
+    right: 0;
+    top: 160px;
+    width: 48%;
+    height: calc(100vh - 160px);
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  .panel-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 76%;
+    max-height: 72vh;
+    aspect-ratio: 4/3;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Public Sans', sans-serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: #6A655D;
+  }
+
+  .panel-img.active { opacity: 1; }
+
+  /* Right rail */
+  .ss-rail {
+    position: fixed;
+    right: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .ss-rail.visible { opacity: 1; }
+
+  .rail-seg {
+    width: 20px;
+    height: 2px;
+    background: rgba(23, 21, 18, 0.18);
+    transition: background 0.35s ease, width 0.35s ease;
+  }
+
+  .rail-seg.sc-active {
+    background: #C40000;
+    width: 28px;
+  }
+</style>
+
+<section class="scroll-showcase" id="scroll-showcase">
+
+  <div class="ss-header-block">
+    <p class="ss-section-eyebrow-ind">Industry Wide Applications</p>
+    <h2 class="showcase-header-title">
+      Built for the <span class="sh-word">Way</span><br>
+      the <span class="sh-word">World</span> <span class="sh-word">Moves.</span>
+    </h2>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-card-left">
+      <span class="ss-eyebrow">Automotive</span>
+      <h2 class="ss-title">Powertrain · Wheel-end · Transmission</h2>
+      <p class="ss-desc">Precision-engineered for modern drivetrains.</p>
+      <p class="ss-body">From high-speed wheel-end applications to critical transmission assemblies, Orbit bearings deliver the precision and load capacity that automotive engineers demand.</p>
+      <a href="#" class="ss-cta">Explore</a>
+    </div>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-card-left">
+      <span class="ss-eyebrow">Commercial Vehicles</span>
+      <h2 class="ss-title">Trucks · Buses · Heavy-duty applications</h2>
+      <p class="ss-desc">Built for load. Engineered for distance.</p>
+      <p class="ss-body">Heavy-duty commercial transport demands bearings that outlast the route. Orbit solutions are built for sustained load capacity, thermal stability, and extended service intervals.</p>
+      <a href="#" class="ss-cta">Explore</a>
+    </div>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-card-left">
+      <span class="ss-eyebrow">Industrial</span>
+      <h2 class="ss-title">Machinery · Power · Manufacturing</h2>
+      <p class="ss-desc">Powering the equipment that powers production.</p>
+      <p class="ss-body">From pumps and motors to heavy machinery and power generation systems — industrial environments require zero-compromise bearing performance, and that's what Orbit delivers.</p>
+      <a href="#" class="ss-cta">Explore</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- Fixed image panel -->
+<div class="ss-img-panel" id="ss-img-panel">
+  <div class="panel-img" style="background: #1E1C1A;">Automotive</div>
+  <div class="panel-img" style="background: #252220;">Commercial</div>
+  <div class="panel-img" style="background: #2B2926;">Industrial</div>
+</div>
+
+<!-- Right rail -->
+<div class="ss-rail" id="ss-rail">
+  <div class="rail-seg"></div>
+  <div class="rail-seg"></div>
+  <div class="rail-seg"></div>
+</div>
+
+<!-- After section — z-index:8 so it slides OVER the fixed image panel (z:6) -->
+<section id="after-section" style="position:relative; z-index:8; background:#F2F0EC; min-height:100vh; display:flex; align-items:center; justify-content:center; padding: 120px 7vw;">
+  <p style="font-family:'Public Sans',sans-serif; font-size:14px; color:#6A655D; letter-spacing:0.06em; text-transform:uppercase;">More sections coming soon</p>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ── INDUSTRY SHOWCASE ─────────────────────── */
+(function () {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const imgPanel     = document.getElementById('ss-img-panel');
+  const panelImgs    = imgPanel ? Array.from(imgPanel.children) : [];
+  const showcaseWords = Array.from(document.querySelectorAll('.sh-word'));
+  const railEl       = document.getElementById('ss-rail');
+  const railSegs     = railEl ? Array.from(railEl.querySelectorAll('.rail-seg')) : [];
+
+  function activatePanel(idx) {
+    panelImgs.forEach((el, j) => el.classList.toggle('active', j === idx));
+    showcaseWords.forEach((w, j) => w.classList.toggle('active', j === idx));
+  }
+
+  function clearPanel() {
+    panelImgs.forEach(el => el.classList.remove('active'));
+    showcaseWords.forEach(w => w.classList.remove('active'));
+  }
+
+  function setRail(idx) {
+    railEl?.classList.add('visible');
+    railSegs.forEach((s, j) => s.classList.toggle('sc-active', j === idx));
+  }
+
+  /* Entry: section slides up as it enters */
+  gsap.fromTo('#scroll-showcase',
+    { y: '40%' },
+    {
+      y: '0%', ease: 'none', immediateRender: false,
+      scrollTrigger: {
+        trigger: '#scroll-showcase',
+        start: 'top bottom',
+        end: 'top center',
+        scrub: 1,
+      }
+    }
+  );
+
+  /* After-section triggers — two separate, per spec */
+  ScrollTrigger.create({
+    trigger: '#after-section',
+    start: 'top 80%',
+    onEnter:     () => {
+      railEl?.classList.remove('visible');
+      gsap.to('.ss-header-block', { opacity: 0, duration: 0.2, ease: 'power1.in' });
+    },
+    onLeaveBack: () => {
+      railEl?.classList.add('visible');
+      gsap.to('.ss-header-block', { opacity: 1, duration: 0.2, ease: 'power1.out' });
+    },
+  });
+
+  ScrollTrigger.create({
+    trigger: '#after-section',
+    start: 'top 20%',
+    onEnter:     () => clearPanel(),
+    onLeaveBack: () => activatePanel(panelImgs.length - 1),
+  });
+
+  /* Per-card triggers */
+  document.querySelectorAll('.ss-card').forEach((card, i) => {
+    const left = card.querySelector('.ss-card-left');
+
+    /* Image crossfade */
+    ScrollTrigger.create({
+      trigger: card,
+      start: 'top 55%',
+      end: 'bottom 45%',
+      onEnter:     () => activatePanel(i),
+      onEnterBack: () => activatePanel(i),
+      onLeaveBack: () => { if (i === 0) clearPanel(); },
+      onLeave:     () => { if (i === panelImgs.length - 1) clearPanel(); },
+    });
+
+    /* Text glide */
+    gsap.fromTo(left,
+      { y: 72 },
+      {
+        y: 0, ease: 'power2.out',
+        scrollTrigger: { trigger: card, start: 'top 80%', end: 'top 10%', scrub: 1.5 }
+      }
+    );
+
+    /* Rail */
+    ScrollTrigger.create({
+      trigger: card,
+      start: 'top 60%',
+      end: 'bottom 40%',
+      onEnter:     () => setRail(i),
+      onEnterBack: () => setRail(i),
+      onLeaveBack: () => { if (i === 0) railEl?.classList.remove('visible'); },
+      onLeave:     () => { if (i === panelImgs.length - 1) railEl?.classList.remove('visible'); },
+    });
+  });
+})();
+</script>
+
 <script>
 /* ── ARC SCROLL STEPPER ─────────────────────── */
 (function () {
