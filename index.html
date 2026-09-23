@@ -1413,16 +1413,16 @@
     requestAnimationFrame(loop);
   }
 
-  /* ── Init ── */
-  recompute();
-  new ResizeObserver(recompute).observe(document.body);
-  loop();
-
-  /* ── Snap animation ── */
+  /* ── Snap animation state (must be declared before loop()) ── */
   let snapAnimating = false;
   let snapRaf       = null;
   let snapLocked    = false;
   let snapLockTimer = null;
+
+  /* ── Init ── */
+  recompute();
+  new ResizeObserver(recompute).observe(document.body);
+  loop();
 
   function easeInOutCubic(t) {
     return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
