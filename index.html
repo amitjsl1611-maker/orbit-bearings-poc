@@ -1337,8 +1337,7 @@
   <div class="ss-header-block">
     <p class="ss-section-eyebrow-ind">Industry Wide Applications</p>
     <h2 class="showcase-header-title">
-      Built for the <span class="sh-word">Way</span><br>
-      the <span class="sh-word">World</span> <span class="sh-word">Moves.</span>
+      Built for the way<br>the world moves.
     </h2>
   </div>
 
@@ -1396,20 +1395,17 @@
 (function () {
   gsap.registerPlugin(ScrollTrigger);
 
-  const imgPanel     = document.getElementById('ss-img-panel');
-  const panelImgs    = imgPanel ? Array.from(imgPanel.children) : [];
-  const showcaseWords = Array.from(document.querySelectorAll('.sh-word'));
-  const railEl       = document.getElementById('ss-rail');
+  const imgPanel  = document.getElementById('ss-img-panel');
+  const panelImgs = imgPanel ? Array.from(imgPanel.children) : [];
+  const railEl    = document.getElementById('ss-rail');
   const railSegs     = railEl ? Array.from(railEl.querySelectorAll('.rail-seg')) : [];
 
   function activatePanel(idx) {
     panelImgs.forEach((el, j) => el.classList.toggle('active', j === idx));
-    showcaseWords.forEach((w, j) => w.classList.toggle('active', j === idx));
   }
 
   function clearPanel() {
     panelImgs.forEach(el => el.classList.remove('active'));
-    showcaseWords.forEach(w => w.classList.remove('active'));
   }
 
   function setRail(idx) {
