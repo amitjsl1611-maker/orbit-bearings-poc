@@ -1389,8 +1389,7 @@
 </div>
 
 <!-- After section — z-index:8 so it slides OVER the fixed image panel (z:6) -->
-<section id="after-section" style="position:relative; z-index:8; background:#F2F0EC; min-height:100vh; display:flex; align-items:center; justify-content:center; padding: 120px 7vw;">
-  <p style="font-family:'Public Sans',sans-serif; font-size:14px; color:#6A655D; letter-spacing:0.06em; text-transform:uppercase;">More sections coming soon</p>
+<section id="after-section" style="position:relative; z-index:8; background:#F2F0EC; padding: 60px 7vw;">
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1421,19 +1420,6 @@
     railSegs.forEach((s, j) => s.classList.toggle('sc-active', j === idx));
   }
 
-  /* Entry: section slides up as it enters */
-  gsap.fromTo('#scroll-showcase',
-    { y: '40%' },
-    {
-      y: '0%', ease: 'none', immediateRender: false,
-      scrollTrigger: {
-        trigger: '#scroll-showcase',
-        start: 'top bottom',
-        end: 'top center',
-        scrub: 1,
-      }
-    }
-  );
 
   /* After-section triggers — two separate, per spec */
   ScrollTrigger.create({
