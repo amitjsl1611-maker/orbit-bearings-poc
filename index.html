@@ -1151,12 +1151,12 @@
 /* ── ARC SCROLL STEPPER ─────────────────────── */
 (function () {
   /* ── Constants ── */
-  const STEP_SCROLL_VH = 115;
+  const STEP_SCROLL_VH = 80;
   const STEP_ANGLE     = 19;          // degrees between adjacent nodes
   const ROT_FACTOR     = 0.85;        // number tilt = angle × ROT_FACTOR
   const TEXT_OFFSET    = 80;          // px slide per unit of d
   const IMG_ROTATE     = 12;          // deg image rotation at d=±1
-  const LERP           = 0.12;        // smoothing per frame
+  const LERP           = 0.16;        // smoothing per frame
 
   /* ── Step data ── */
   const STEPS = [
@@ -1422,19 +1422,71 @@
   new ResizeObserver(recompute).observe(document.body);
   loop();
 
+  /* ── Snap animation ── */
+  let snapAnimating = false;
+  let snapCooldown  = false;
+  let snapRaf       = null;
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  }
+
+  function snapToStep(idx) {
+    idx = Math.max(0, Math.min(N - 1, idx));
+    if (snapAnimating) { cancelAnimationFrame(snapRaf); snapAnimating = false; }
+
+    const wTop   = wrapper.getBoundingClientRect().top + window.scrollY;
+    const target = wTop + idx * stepPx;
+    const start  = window.scrollY;
+    const dist   = target - start;
+    if (Math.abs(dist) < 2) return;
+
+    const dur = 520;
+    const t0  = performance.now();
+    snapAnimating = true;
+
+    function tick(now) {
+      const t = Math.min((now - t0) / dur, 1);
+      window.scrollTo(0, start + dist * easeInOutCubic(t));
+      if (t < 1) { snapRaf = requestAnimationFrame(tick); }
+      else        { snapAnimating = false; }
+    }
+    snapRaf = requestAnimationFrame(tick);
+  }
+
+  /* ── Wheel snap ── */
+  wrapper.addEventListener('wheel', function(e) {
+    const wTop = wrapper.getBoundingClientRect().top + window.scrollY;
+    const wEnd = wTop + (N - 1) * stepPx;
+    const sy   = window.scrollY;
+
+    // Only intercept while inside the stepper range
+    if (sy < wTop - 4 || sy > wEnd + 4) return;
+
+    const dir     = e.deltaY > 0 ? 1 : -1;
+    const current = Math.round(rawP);
+
+    // At edges, let native scroll carry the user out
+    if (dir === -1 && current <= 0) return;
+    if (dir ===  1 && current >= N - 1) return;
+
+    e.preventDefault();
+    if (snapCooldown || snapAnimating) return;
+
+    snapToStep(current + dir);
+    snapCooldown = true;
+    setTimeout(() => { snapCooldown = false; }, 600);
+  }, { passive: false });
+
   /* ── Keyboard nav ── */
   stage.addEventListener('keydown', e => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault();
-      const target = Math.min(N - 1, Math.round(p) + 1);
-      const wTop = wrapper.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: wTop + target * stepPx, behavior: 'smooth' });
+      snapToStep(Math.min(N - 1, Math.round(p) + 1));
     }
     if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
       e.preventDefault();
-      const target = Math.max(0, Math.round(p) - 1);
-      const wTop = wrapper.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: wTop + target * stepPx, behavior: 'smooth' });
+      snapToStep(Math.max(0, Math.round(p) - 1));
     }
   });
 
