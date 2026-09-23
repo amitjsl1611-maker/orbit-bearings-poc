@@ -202,16 +202,23 @@
      MEGA MENU CONTAINER
   ═══════════════════════════════════ */
   .mega-wrap {
-    position: relative;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
     z-index: 1;
     background: #fff;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 240ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.07);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms;
   }
 
   #nav.open .mega-wrap {
-    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 0s;
   }
 
   /* Individual panels */
@@ -222,12 +229,12 @@
 
   .mega-panel.active {
     display: block;
-    animation: panel-reveal 0.2s ease both;
+    animation: panel-fade 180ms ease both;
   }
 
-  @keyframes panel-reveal {
-    from { opacity: 0; transform: translateY(-5px); }
-    to   { opacity: 1; transform: translateY(0); }
+  @keyframes panel-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   /* ── MEGA INNER GRIDS ── */
@@ -601,7 +608,7 @@
   /* ── Section header ── */
   .ass-section-header {
     position: absolute;
-    top: calc(var(--nav-h) + 20px);
+    top: calc(var(--nav-h) + 100px);
     left: 0;
     right: 0;
     z-index: 2;
@@ -715,7 +722,7 @@
   .ass-text-col {
     position: absolute;
     left: 26vw;
-    top: 58%;
+    top: 66%;
     width: 36vw;
   }
 
@@ -774,7 +781,7 @@
     position: absolute;
     left: 54vw;
     right: var(--side);
-    top: 58%;
+    top: 66%;
   }
 
   .ass-image-panel {
@@ -804,7 +811,7 @@
 
   /* ── Mobile layout ── */
   @media (max-width: 767px) {
-    .ass-section-header { top: 24px; }
+    .ass-section-header { top: 56px; }
 
     .ass-svg { display: none; }
 
@@ -1146,6 +1153,211 @@
 </div>
 
 <!-- ════════════════════════════════════
+     ELASTIC BLOB TRANSITION
+════════════════════════════════════ -->
+<style>
+#blob-metrics {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: none;
+}
+.blob-metrics-inner {
+  display: flex;
+  gap: clamp(32px, 5.5vw, 110px);
+  align-items: flex-start;
+  padding: 0 clamp(20px, 3.5vw, 56px);
+}
+.blob-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.blob-metric-number {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(2.5rem, 8vw, 11rem);
+  font-weight: 300;
+  color: #FFFFFF;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.blob-metric-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(0.48rem, 0.62vw, 0.68rem);
+  font-weight: 500;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+</style>
+
+<div id="elastic-blob-outer" style="position:relative;height:100vh;z-index:160;background:transparent;">
+  <svg
+    id="elastic-svg"
+    viewBox="0 0 100 100"
+    preserveAspectRatio="none"
+    style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;display:block;"
+  >
+    <path id="elastic-top" fill="#000000" d="M -5 110 L -5 0 Q 50 0 105 0 L 105 110 Z"/>
+    <path id="elastic-bot" fill="#000000" d="M -5 -10 L -5 150 Q 50 200 105 150 L 105 -10 Z"/>
+  </svg>
+
+  <!-- Metrics overlay — centred in the black blob -->
+  <div id="blob-metrics">
+    <div class="blob-metrics-inner">
+      <div class="blob-metric">
+        <span class="blob-metric-number" data-target="35" data-suffix="+">0+</span>
+        <span class="blob-metric-label">Years of Engineering</span>
+      </div>
+      <div class="blob-metric">
+        <span class="blob-metric-number" data-target="10" data-suffix="M+">0M+</span>
+        <span class="blob-metric-label">Annual Production Capacity</span>
+      </div>
+      <div class="blob-metric">
+        <span class="blob-metric-number" data-target="4" data-suffix="" data-pad="2">04</span>
+        <span class="blob-metric-label">Global Markets</span>
+      </div>
+      <div class="blob-metric">
+        <span class="blob-metric-number" data-target="100" data-suffix="%">0%</span>
+        <span class="blob-metric-label">In-House Quality Control</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── ELASTIC BLOB ─────────────────────────── */
+(function () {
+  const outer    = document.getElementById('elastic-blob-outer');
+  const pathTop  = document.getElementById('elastic-top');
+  const pathBot  = document.getElementById('elastic-bot');
+  const metrics  = document.getElementById('blob-metrics');
+  if (!outer || !pathTop || !pathBot) return;
+
+  // Spring state — base (stiffness 90, damping 14)
+  let baseVal = 0, baseVel = 0;
+  // Spring state — stretch (stiffness 400, damping 40, critically damped)
+  let stretchVal = 0, stretchVel = 0;
+
+  // Scroll velocity tracking
+  let scrollVel = 0;
+  let lastScrollY = window.scrollY;
+  let lastScrollT = performance.now();
+
+  window.addEventListener('scroll', function () {
+    const now = performance.now();
+    const elapsed = (now - lastScrollT) / 1000;
+    if (elapsed > 0.004) {
+      scrollVel = (window.scrollY - lastScrollY) / elapsed;
+      lastScrollY = window.scrollY;
+      lastScrollT = now;
+    }
+  }, { passive: true });
+
+  function stepSpring(val, vel, target, k, d, m, dt) {
+    const force = -k * (val - target) - d * vel;
+    vel += (force / m) * dt;
+    val += vel * dt;
+    return [val, vel];
+  }
+
+  /* ── Count-up animation ── */
+  let hasAnimated = false;
+  function runCountUp() {
+    if (hasAnimated) return;
+    hasAnimated = true;
+    const nums = outer.querySelectorAll('.blob-metric-number');
+    nums.forEach(function(el) {
+      const target = parseInt(el.dataset.target, 10);
+      const suffix = el.dataset.suffix || '';
+      const pad = parseInt(el.dataset.pad || '0', 10);
+      const duration = 1800;
+      const start = performance.now();
+      function step(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const val = Math.round(eased * target);
+        const str = pad > 0 ? String(val).padStart(pad, '0') : String(val);
+        el.textContent = str + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  let prevT = null;
+  function tick(t) {
+    const dt = prevT ? Math.min((t - prevT) / 1000, 0.05) : 0.016;
+    prevT = t;
+
+    // Scroll progress: 0 = top of section at viewport bottom, 1 = bottom at viewport top
+    const rect = outer.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    const p    = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
+
+    // Base spring: target = -50 * p
+    const baseTarget = -50 * p;
+    [baseVal, baseVel] = stepSpring(baseVal, baseVel, baseTarget, 90, 14, 1, dt);
+
+    // Velocity stretch spring
+    const rawStretch = Math.abs(scrollVel) * 0.0145;
+    [stretchVal, stretchVel] = stepSpring(stretchVal, stretchVel, rawStretch, 400, 40, 1, dt);
+    const stretch = Math.min(25, stretchVal);
+
+    // Decay raw velocity estimate when scroll has gone quiet
+    const staleness = (t - lastScrollT) / 1000;
+    if (staleness > 0.05) scrollVel *= (1 - Math.min(1, dt * 6));
+
+    // Control-point positions — endpoints at topCtrl so corners are always covered
+    const topCtrl    = baseVal - stretch;
+    const bottomCtrl = baseVal + 150 + stretch;
+
+    pathTop.setAttribute('d', `M -5 110 L -5 ${topCtrl.toFixed(2)} Q 50 ${(topCtrl*2).toFixed(2)} 105 ${topCtrl.toFixed(2)} L 105 110 Z`);
+    pathBot.setAttribute('d', `M -5 -10 L -5 ${bottomCtrl.toFixed(2)} Q 50 ${(2*bottomCtrl-100).toFixed(2)} 105 ${bottomCtrl.toFixed(2)} L 105 -10 Z`);
+
+    // Metrics: fade in as soon as blob enters (p 0.03→0.22), hold, fade out before 3rd fold (p 0.50→0.63)
+    let opacity = 0;
+    if (p >= 0.03 && p <= 0.22) {
+      opacity = (p - 0.03) / 0.19;
+    } else if (p > 0.22 && p <= 0.50) {
+      opacity = 1;
+    } else if (p > 0.50 && p <= 0.63) {
+      opacity = 1 - (p - 0.50) / 0.13;
+    }
+    if (metrics) metrics.style.opacity = Math.max(0, opacity);
+
+    // Reset when section is not in view so animation replays on re-entry
+    if (p < 0.01) {
+      hasAnimated = false;
+      const resetNums = outer.querySelectorAll('.blob-metric-number');
+      resetNums.forEach(function(el) {
+        const pad = parseInt(el.dataset.pad || '0', 10);
+        const suffix = el.dataset.suffix || '';
+        el.textContent = (pad > 0 ? '0'.padStart(pad, '0') : '0') + suffix;
+      });
+    }
+
+    // Trigger count-up once metrics are actually visible
+    if (opacity > 0.05) runCountUp();
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
+<!-- ════════════════════════════════════
      3RD FOLD — INDUSTRY SHOWCASE
 ════════════════════════════════════ -->
 
@@ -1170,9 +1382,9 @@
   .ss-section-eyebrow-ind {
     display: block;
     font-family: 'Public Sans', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #6A655D;
     margin-bottom: 14px;
@@ -1213,9 +1425,9 @@
   .ss-eyebrow {
     display: block;
     font-family: 'Public Sans', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #6A655D;
     margin-bottom: 14px;
@@ -1223,10 +1435,10 @@
 
   .ss-title {
     font-family: 'Public Sans', sans-serif;
-    font-size: clamp(24px, 2.8vw, 40px);
+    font-size: clamp(40px, 4.2vw, 64px);
     font-weight: 300;
-    line-height: 1.15;
-    letter-spacing: -0.018em;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     color: #171512;
     margin: 0 0 14px;
     max-width: 480px;
@@ -1234,17 +1446,17 @@
 
   .ss-desc {
     font-family: 'Public Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
+    font-size: 15.5px;
+    font-weight: 400;
+    letter-spacing: 0;
     color: #6A655D;
     margin: 0 0 16px;
   }
 
   .ss-body {
     font-family: 'Public Sans', sans-serif;
-    font-size: 14px;
-    line-height: 1.65;
+    font-size: 15.5px;
+    line-height: 1.55;
     color: #6A655D;
     max-width: 400px;
     margin: 0 0 24px;
@@ -1285,33 +1497,37 @@
     position: fixed;
     right: 0;
     top: 160px;
-    width: 48%;
+    width: 52%;
     height: calc(100vh - 160px);
     pointer-events: none;
     z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .panel-img {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 38%;
     transform: translate(-50%, -50%);
-    width: 92%;
-    max-height: 62vh;
-    aspect-ratio: 16/9;
+    width: 88%;
     opacity: 0;
     transition: opacity 0.55s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Public Sans', sans-serif;
-    font-size: clamp(28px, 4vw, 52px);
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    color: #6A655D;
   }
 
   .panel-img.active { opacity: 1; }
+
+  .panel-img-el {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Portrait machine image — narrower width so full height fits in panel */
+  #pi-ind {
+    width: 58%;
+  }
 
   /* Right rail */
   .ss-rail {
@@ -1383,9 +1599,9 @@
 
 <!-- Fixed image panel -->
 <div class="ss-img-panel" id="ss-img-panel">
-  <div class="panel-img" style="background: #1E1C1A;">Automotive</div>
-  <div class="panel-img"><img src="heavy machine.png" alt="Commercial Vehicles" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
-  <div class="panel-img"><img src="industrial.png" alt="Industrial" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+  <div class="panel-img" id="pi-auto"><img src="automotive.png" alt="Automotive" class="panel-img-el"></div>
+  <div class="panel-img" id="pi-heavy"><img src="heavy machine.png" alt="Commercial Vehicles" class="panel-img-el"></div>
+  <div class="panel-img" id="pi-ind"><img src="industrial.png" alt="Industrial" class="panel-img-el"></div>
 </div>
 
 <!-- Right rail -->
