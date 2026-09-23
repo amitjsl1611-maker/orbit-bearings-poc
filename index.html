@@ -1262,10 +1262,6 @@
     panel.className = 'ass-text-panel';
     panel.setAttribute('aria-hidden', 'true');
 
-    const ey = document.createElement('p');
-    ey.className = 'ass-eyebrow';
-    ey.textContent = step.eyebrow;
-
     const h2 = document.createElement('h2');
     h2.className = 'ass-title';
     h2.textContent = step.title;
@@ -1274,7 +1270,7 @@
     desc.className = 'ass-desc';
     desc.textContent = step.description;
 
-    panel.append(ey, h2, desc);
+    panel.append(h2, desc);
 
     if (step.tags?.length) {
       const tags = document.createElement('div');
