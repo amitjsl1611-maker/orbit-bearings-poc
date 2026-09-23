@@ -601,7 +601,7 @@
   /* ── Section header ── */
   .ass-section-header {
     position: absolute;
-    top: 40px;
+    top: calc(var(--nav-h) + 20px);
     left: 0;
     right: 0;
     z-index: 2;
@@ -715,7 +715,7 @@
   .ass-text-col {
     position: absolute;
     left: 26vw;
-    top: 50%;
+    top: 58%;
     width: 36vw;
   }
 
@@ -773,7 +773,7 @@
   .ass-image-col {
     position: absolute;
     left: 66vw;
-    top: 50%;
+    top: 58%;
     width: 24vw;
   }
 
@@ -1161,28 +1161,28 @@
   /* ── Step data ── */
   const STEPS = [
     {
-      eyebrow: 'STEP 01',
+      eyebrow: 'STEP 1',
       title: 'Engineering\nDesign',
       description: 'We begin with rigorous FEA and tolerance-stack analysis — defining load profiles, operating conditions and material specifications before a single component is machined.',
       tags: ['FEA Analysis', 'CAD Modelling', 'Tolerance Stack'],
       image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Engineering', alt: 'Engineering Design' }
     },
     {
-      eyebrow: 'STEP 02',
+      eyebrow: 'STEP 2',
       title: 'Material\nSelection',
       description: 'From high-grade bearing steels to advanced ceramics, every material is matched to the exact operating environment — temperature, load, speed and media resistance.',
       tags: ['Bearing Steel', 'Ceramics', 'Surface Coatings'],
       image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Materials', alt: 'Material Selection' }
     },
     {
-      eyebrow: 'STEP 03',
+      eyebrow: 'STEP 3',
       title: 'Precision\nManufacturing',
       description: 'State-of-the-art CNC grinding lines, superfinishing cells and automated assembly deliver consistent dimensional accuracy at scale across all our production facilities.',
       tags: ['CNC Grinding', 'Superfinishing', 'Assembly'],
       image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Manufacturing', alt: 'Precision Manufacturing' }
     },
     {
-      eyebrow: 'STEP 04',
+      eyebrow: 'STEP 4',
       title: 'Quality\nAssurance',
       description: 'Every bearing passes multi-stage inspection — CMM dimensional checks, noise and vibration analysis, and fatigue-life testing — before it leaves our facility.',
       tags: ['CMM Inspection', 'Vibration Testing', 'Fatigue Life'],
@@ -1219,7 +1219,7 @@
 
   /* ── Build nodes ── */
   const nodeEls = STEPS.map((step, i) => {
-    const label = String(i + 1).padStart(2, '0');
+    const label = String(i + 1);
     const btn = document.createElement('button');
     btn.className = 'ass-node';
     btn.setAttribute('aria-label', `Go to step ${label}: ${step.title.replace('\n', ' ')}`);
