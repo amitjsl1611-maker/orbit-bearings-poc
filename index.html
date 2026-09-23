@@ -1263,6 +1263,7 @@
     text-decoration: none;
     position: relative;
     padding-bottom: 3px;
+    transition: color 200ms ease;
   }
 
   .ss-cta::after {
@@ -1270,21 +1271,16 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
+    right: 0;
     height: 1px;
-    background: #171512;
-    transform: scaleX(1);
+    background: #C40000;
+    transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: transform 200ms ease;
   }
 
   .ss-cta:hover { color: #C40000; }
-
-  .ss-cta:hover::after {
-    background: #C40000;
-    transform: scaleX(0.4);
-    transform-origin: left;
-  }
+  .ss-cta:hover::after { transform: scaleX(1); }
 
   /* Fixed image panel */
   .ss-img-panel {
