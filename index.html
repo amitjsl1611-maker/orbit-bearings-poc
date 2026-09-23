@@ -15,8 +15,12 @@
     --side: clamp(24px, 4vw, 60px);
   }
 
-  html, body {
+  html {
     height: 100%;
+  }
+
+  body {
+    min-height: 100%;
     background: #000;
     font-family: 'Public Sans', system-ui, sans-serif;
     overflow-x: hidden;
@@ -574,6 +578,274 @@
     .mega-res-col { border-right: none; padding-right: 0; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
     .mega-res-col:last-child { border-bottom: none; }
   }
+
+  /* ════════════════════════════════════
+     HERO SPACER
+  ════════════════════════════════════ */
+  .hero-spacer {
+    height: 100vh;
+    position: relative;
+  }
+
+  /* ════════════════════════════════════
+     ARC SCROLL STEPPER — tokens
+  ════════════════════════════════════ */
+  :root {
+    --ass-bg:    #F2F0EC;
+    --ass-ink:   #171512;
+    --ass-muted: #6A655D;
+    --ass-line:  #D9D5CD;
+    --ass-track: rgba(23,21,18,.12);
+  }
+
+  /* ── Section header ── */
+  .ass-section-header {
+    position: relative;
+    z-index: 150;
+    background: var(--ass-bg);
+    padding: 96px var(--side) 64px;
+  }
+
+  .ass-section-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ass-muted);
+    margin-bottom: 18px;
+  }
+
+  .ass-section-title {
+    font-size: clamp(32px, 3.8vw, 60px);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--ass-ink);
+    max-width: 560px;
+  }
+
+  .ass-section-title strong {
+    font-weight: 700;
+  }
+
+  /* ── Wrapper (creates scroll height) ── */
+  .ass-wrapper {
+    position: relative;
+    z-index: 150;
+    background: var(--ass-bg);
+  }
+
+  /* ── Stage (sticky viewport) ── */
+  .ass-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--ass-bg);
+    outline: none;
+  }
+
+  /* ── Arc SVG ── */
+  .ass-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  /* ── Number nodes ── */
+  .ass-nodes-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .ass-node {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: all;
+    will-change: transform;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .ass-node-base {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--ass-bg);
+  }
+
+  .ass-node-active-disc {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--ass-ink);
+    box-shadow: 0 10px 28px rgba(0,0,0,.16);
+  }
+
+  .ass-node-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--ass-ink);
+  }
+
+  .ass-node-num {
+    position: absolute;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .ass-node-num-dark { color: var(--ass-ink); }
+  .ass-node-num-light { color: var(--ass-bg); }
+
+  /* ── Text column ── */
+  .ass-text-col {
+    position: absolute;
+    left: 31vw;
+    top: 50%;
+    width: 36vw;
+  }
+
+  .ass-text-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
+
+  .ass-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ass-muted);
+    margin-bottom: 14px;
+  }
+
+  .ass-title {
+    font-size: clamp(40px, 4.2vw, 64px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--ass-ink);
+    margin-bottom: 20px;
+    white-space: pre-line;
+  }
+
+  .ass-desc {
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--ass-muted);
+    max-width: 400px;
+    margin-bottom: 28px;
+  }
+
+  .ass-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ass-tag {
+    padding: 8px 16px;
+    border: 1px solid var(--ass-line);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ass-ink);
+  }
+
+  /* ── Image column ── */
+  .ass-image-col {
+    position: absolute;
+    left: 70vw;
+    top: 50%;
+    width: 24vw;
+  }
+
+  .ass-image-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    will-change: transform, opacity;
+  }
+
+  .ass-image-panel img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    filter: drop-shadow(0 34px 42px rgba(23,21,18,.20));
+    will-change: transform;
+    animation: assFloat 5s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes assFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-16px) rotate(1.2deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ass-image-panel img { animation: none; }
+  }
+
+  /* ── Mobile layout ── */
+  @media (max-width: 767px) {
+    .ass-section-header { padding: 64px var(--side) 40px; }
+
+    .ass-svg { display: none; }
+
+    .ass-nodes-layer {
+      position: absolute;
+      top: 24px; left: 0; right: 0;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .ass-node {
+      position: relative !important;
+      left: auto !important;
+      top: auto !important;
+      transform: none !important;
+      width: 44px;
+      height: 44px;
+    }
+
+    .ass-node-num { font-size: 13px; }
+
+    .ass-text-col {
+      left: var(--side);
+      right: var(--side);
+      width: auto;
+      top: 100px;
+    }
+
+    .ass-title { font-size: clamp(28px, 7vw, 40px); }
+
+    .ass-image-col {
+      left: var(--side);
+      right: var(--side);
+      width: auto;
+      top: auto;
+      bottom: 32px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -853,6 +1125,336 @@
 
 <!-- Background scrim (sits between video and nav) -->
 <div class="nav-scrim" id="navScrim"></div>
+
+<!-- ── HERO SPACER ── -->
+<div class="hero-spacer"></div>
+
+<!-- ════════════════════════════════════
+     2ND FOLD — ARC SCROLL STEPPER
+════════════════════════════════════ -->
+<section class="ass-section-header">
+  <p class="ass-section-eyebrow">Our Engineering Process</p>
+  <h2 class="ass-section-title">Precision at every<br><strong>stage of production.</strong></h2>
+</section>
+
+<div id="assWrapper" class="ass-wrapper">
+  <div id="assStage" class="ass-stage" tabindex="0" role="region" aria-label="Engineering process steps">
+    <svg id="assSvg" class="ass-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+    <div id="assNodes" class="ass-nodes-layer"></div>
+    <div id="assTextCol" class="ass-text-col"></div>
+    <div id="assImageCol" class="ass-image-col"></div>
+  </div>
+</div>
+
+<script>
+/* ── ARC SCROLL STEPPER ─────────────────────── */
+(function () {
+  /* ── Constants ── */
+  const STEP_SCROLL_VH = 115;
+  const STEP_ANGLE     = 19;          // degrees between adjacent nodes
+  const ROT_FACTOR     = 0.85;        // number tilt = angle × ROT_FACTOR
+  const TEXT_OFFSET    = 80;          // px slide per unit of d
+  const IMG_ROTATE     = 12;          // deg image rotation at d=±1
+  const LERP           = 0.12;        // smoothing per frame
+
+  /* ── Step data ── */
+  const STEPS = [
+    {
+      eyebrow: 'STEP 01',
+      title: 'Engineering\nDesign',
+      description: 'We begin with rigorous FEA and tolerance-stack analysis — defining load profiles, operating conditions and material specifications before a single component is machined.',
+      tags: ['FEA Analysis', 'CAD Modelling', 'Tolerance Stack'],
+      image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Engineering', alt: 'Engineering Design' }
+    },
+    {
+      eyebrow: 'STEP 02',
+      title: 'Material\nSelection',
+      description: 'From high-grade bearing steels to advanced ceramics, every material is matched to the exact operating environment — temperature, load, speed and media resistance.',
+      tags: ['Bearing Steel', 'Ceramics', 'Surface Coatings'],
+      image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Materials', alt: 'Material Selection' }
+    },
+    {
+      eyebrow: 'STEP 03',
+      title: 'Precision\nManufacturing',
+      description: 'State-of-the-art CNC grinding lines, superfinishing cells and automated assembly deliver consistent dimensional accuracy at scale across all our production facilities.',
+      tags: ['CNC Grinding', 'Superfinishing', 'Assembly'],
+      image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Manufacturing', alt: 'Precision Manufacturing' }
+    },
+    {
+      eyebrow: 'STEP 04',
+      title: 'Quality\nAssurance',
+      description: 'Every bearing passes multi-stage inspection — CMM dimensional checks, noise and vibration analysis, and fatigue-life testing — before it leaves our facility.',
+      tags: ['CMM Inspection', 'Vibration Testing', 'Fatigue Life'],
+      image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Quality', alt: 'Quality Assurance' }
+    },
+    {
+      eyebrow: 'STEP 05',
+      title: 'Global\nDelivery',
+      description: 'From our manufacturing hubs to your facility, our logistics network ensures on-time delivery with full component traceability and ongoing application support.',
+      tags: ['Global Logistics', 'Traceability', 'After-Sales'],
+      image: { src: 'https://placehold.co/600x600/2b2926/888888?text=Delivery', alt: 'Global Delivery' }
+    }
+  ];
+
+  const N = STEPS.length;
+  const NS = 'http://www.w3.org/2000/svg';
+  const toRad = d => d * Math.PI / 180;
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+  /* ── DOM refs ── */
+  const wrapper   = document.getElementById('assWrapper');
+  const stage     = document.getElementById('assStage');
+  const svg       = document.getElementById('assSvg');
+  const nodesLayer= document.getElementById('assNodes');
+  const textCol   = document.getElementById('assTextCol');
+  const imageCol  = document.getElementById('assImageCol');
+
+  /* ── SVG arcs ── */
+  const trackCircle = document.createElementNS(NS, 'circle');
+  trackCircle.setAttribute('fill', 'none');
+  trackCircle.setAttribute('stroke', 'rgba(23,21,18,.12)');
+  trackCircle.setAttribute('stroke-width', '1.5');
+  svg.appendChild(trackCircle);
+
+  const progressCircle = document.createElementNS(NS, 'circle');
+  progressCircle.setAttribute('fill', 'none');
+  progressCircle.setAttribute('stroke', '#171512');
+  progressCircle.setAttribute('stroke-width', '3.5');
+  progressCircle.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(progressCircle);
+
+  /* ── Build nodes ── */
+  const nodeEls = STEPS.map((step, i) => {
+    const label = String(i + 1).padStart(2, '0');
+    const btn = document.createElement('button');
+    btn.className = 'ass-node';
+    btn.setAttribute('aria-label', `Go to step ${label}: ${step.title.replace('\n', ' ')}`);
+
+    const base = document.createElement('div');
+    base.className = 'ass-node-base';
+
+    const disc = document.createElement('div');
+    disc.className = 'ass-node-active-disc';
+    disc.style.opacity = '0';
+
+    const ring = document.createElement('div');
+    ring.className = 'ass-node-ring';
+    ring.style.opacity = '0';
+
+    const numDark = document.createElement('span');
+    numDark.className = 'ass-node-num ass-node-num-dark';
+    numDark.textContent = label;
+
+    const numLight = document.createElement('span');
+    numLight.className = 'ass-node-num ass-node-num-light';
+    numLight.textContent = label;
+    numLight.style.opacity = '0';
+
+    btn.append(base, disc, ring, numDark, numLight);
+    nodesLayer.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+      const wTop = wrapper.getBoundingClientRect().top + window.scrollY;
+      const stepPx = (STEP_SCROLL_VH / 100) * window.innerHeight;
+      window.scrollTo({ top: wTop + i * stepPx, behavior: 'smooth' });
+    });
+
+    return { btn, disc, ring, numDark, numLight };
+  });
+
+  /* ── Build text panels ── */
+  const textPanels = STEPS.map((step, i) => {
+    const panel = document.createElement('div');
+    panel.className = 'ass-text-panel';
+    panel.setAttribute('aria-hidden', 'true');
+
+    const ey = document.createElement('p');
+    ey.className = 'ass-eyebrow';
+    ey.textContent = step.eyebrow;
+
+    const h2 = document.createElement('h2');
+    h2.className = 'ass-title';
+    h2.textContent = step.title;
+
+    const desc = document.createElement('p');
+    desc.className = 'ass-desc';
+    desc.textContent = step.description;
+
+    panel.append(ey, h2, desc);
+
+    if (step.tags?.length) {
+      const tags = document.createElement('div');
+      tags.className = 'ass-tags';
+      step.tags.forEach(t => {
+        const s = document.createElement('span');
+        s.className = 'ass-tag';
+        s.textContent = t;
+        tags.appendChild(s);
+      });
+      panel.appendChild(tags);
+    }
+
+    textCol.appendChild(panel);
+    return panel;
+  });
+
+  /* ── Build image panels ── */
+  const imagePanels = STEPS.map((step, i) => {
+    const panel = document.createElement('div');
+    panel.className = 'ass-image-panel';
+
+    const img = document.createElement('img');
+    img.src = step.image.src;
+    img.alt = step.image.alt;
+    img.loading = 'lazy';
+
+    panel.appendChild(img);
+    imageCol.appendChild(panel);
+    return panel;
+  });
+
+  /* ── Geometry ── */
+  let R, cx, cy, stepPx, circumference, stepLen;
+
+  function recompute() {
+    R             = 0.32 * window.innerWidth;
+    cx            = 0.20 * window.innerWidth - R;
+    cy            = window.innerHeight / 2;
+    stepPx        = (STEP_SCROLL_VH / 100) * window.innerHeight;
+    circumference = 2 * Math.PI * R;
+    stepLen       = circumference * STEP_ANGLE / 360;
+
+    wrapper.style.height = (window.innerHeight + (N - 1) * stepPx) + 'px';
+
+    [trackCircle, progressCircle].forEach(c => {
+      c.setAttribute('cx', cx);
+      c.setAttribute('cy', cy);
+      c.setAttribute('r', R);
+    });
+  }
+
+  /* ── Scroll progress ── */
+  let rawP = 0, p = 0;
+
+  function readScroll() {
+    const top    = wrapper.getBoundingClientRect().top;
+    const scrolled = -top;
+    rawP = clamp(scrolled / stepPx, 0, N - 1);
+  }
+
+  /* ── Render loop ── */
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile = () => window.innerWidth < 768;
+
+  function render() {
+    const active = Math.round(p);
+
+    STEPS.forEach((_, i) => {
+      const d    = i - p;
+      const absD = Math.abs(d);
+      const { btn, disc, ring, numDark, numLight } = nodeEls[i];
+
+      if (!mobile()) {
+        const angle = -d * toRad(STEP_ANGLE);
+        const nx = cx + R * Math.cos(angle);
+        const ny = cy + R * Math.sin(angle);
+        const rotation = d * STEP_ANGLE * ROT_FACTOR;
+        const scale    = Math.max(0.68, 1.12 - 0.11 * absD);
+        btn.style.left      = nx + 'px';
+        btn.style.top       = ny + 'px';
+        btn.style.transform = `translate(-50%,-50%) rotate(${rotation}deg) scale(${scale})`;
+        btn.style.opacity   = absD > 4.5 ? '0' : '1';
+      } else {
+        btn.style.removeProperty('left');
+        btn.style.removeProperty('top');
+        btn.style.removeProperty('transform');
+        btn.style.opacity = '1';
+      }
+
+      const activeOp = clamp(1 - absD, 0, 1);
+      disc.style.opacity    = activeOp;
+      numLight.style.opacity = activeOp;
+      numDark.style.opacity  = 1 - activeOp;
+
+      const ringOp = (1 - activeOp) * Math.max(0.20, 0.50 - 0.09 * absD);
+      ring.style.opacity = ringOp;
+
+      btn.setAttribute('aria-current', i === active ? 'step' : 'false');
+    });
+
+    /* progress arc */
+    if (!mobile()) {
+      const dashLen = p * stepLen;
+      progressCircle.setAttribute('stroke-dasharray', `${dashLen} ${circumference}`);
+    }
+
+    /* text panels */
+    textPanels.forEach((panel, i) => {
+      const d    = i - p;
+      const absD = Math.abs(d);
+      const op   = clamp(1 - absD * 2, 0, 1);
+      const ty   = d * TEXT_OFFSET;
+      panel.style.opacity   = op;
+      panel.style.transform = `translateY(calc(-50% + ${ty}px))`;
+      panel.style.pointerEvents = i === Math.round(p) ? 'auto' : 'none';
+      panel.setAttribute('aria-hidden', i === Math.round(p) ? 'false' : 'true');
+    });
+
+    /* image panels */
+    imagePanels.forEach((panel, i) => {
+      const d    = i - p;
+      const absD = Math.abs(d);
+      const op   = clamp(1 - absD * 1.5, 0, 1);
+      const scale  = Math.max(0.78, 1 - 0.09 * absD);
+      const rotate = prefersReduced ? 0 : -d * IMG_ROTATE;
+      panel.style.opacity   = op;
+      panel.style.transform = `translateY(-50%) rotate(${rotate}deg) scale(${scale})`;
+    });
+  }
+
+  function loop() {
+    readScroll();
+    if (prefersReduced) {
+      p = rawP;
+    } else {
+      p += (rawP - p) * LERP;
+    }
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  /* ── Init ── */
+  recompute();
+  new ResizeObserver(recompute).observe(document.body);
+  loop();
+
+  /* ── Keyboard nav ── */
+  stage.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      const target = Math.min(N - 1, Math.round(p) + 1);
+      const wTop = wrapper.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: wTop + target * stepPx, behavior: 'smooth' });
+    }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const target = Math.max(0, Math.round(p) - 1);
+      const wTop = wrapper.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: wTop + target * stepPx, behavior: 'smooth' });
+    }
+  });
+
+  /* ── Fade hero copy out on scroll ── */
+  const heroCopy   = document.querySelector('.hero-copy');
+  const heroBottom = document.querySelector('.hero-bottom-right');
+  window.addEventListener('scroll', () => {
+    const fade = Math.max(0, 1 - window.scrollY / (window.innerHeight * 0.35));
+    if (heroCopy)   heroCopy.style.opacity   = fade;
+    if (heroBottom) heroBottom.style.opacity  = fade;
+  }, { passive: true });
+})();
+/* ── END ARC SCROLL STEPPER ─────────── */
+</script>
 
 <script>
   const NAV   = document.getElementById('nav');
