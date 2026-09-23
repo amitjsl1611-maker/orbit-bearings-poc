@@ -1137,7 +1137,7 @@
 <div id="assWrapper" class="ass-wrapper">
   <div id="assStage" class="ass-stage" tabindex="0" role="region" aria-label="Engineering process steps">
     <div class="ass-section-header">
-      <p class="ass-section-eyebrow">Engineered for Precision · Built for Scale</p>
+      <p class="ass-section-eyebrow">Our capabilities</p>
       <h2 class="ass-section-title">More Than a<br><strong>Bearing Manufacturer.</strong></h2>
     </div>
     <svg id="assSvg" class="ass-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
@@ -1419,9 +1419,10 @@
   loop();
 
   /* ── Snap animation ── */
-  let snapAnimating = false;
-  let snapCooldown  = false;
-  let snapRaf       = null;
+  let snapAnimating  = false;
+  let snapRaf        = null;
+  let cooldownTimer  = null;
+  let postCooldown   = false;
 
   function easeInOutCubic(t) {
     return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
@@ -1429,7 +1430,7 @@
 
   function snapToStep(idx) {
     idx = Math.max(0, Math.min(N - 1, idx));
-    if (snapAnimating) { cancelAnimationFrame(snapRaf); snapAnimating = false; }
+    if (snapAnimating) return; // never cancel a running snap
 
     const wTop   = wrapper.getBoundingClientRect().top + window.scrollY;
     const target = wTop + idx * stepPx;
@@ -1444,8 +1445,15 @@
     function tick(now) {
       const t = Math.min((now - t0) / dur, 1);
       window.scrollTo(0, start + dist * easeInOutCubic(t));
-      if (t < 1) { snapRaf = requestAnimationFrame(tick); }
-      else        { snapAnimating = false; }
+      if (t < 1) {
+        snapRaf = requestAnimationFrame(tick);
+      } else {
+        snapAnimating = false;
+        // hold a post-animation cooldown so trailing wheel events don't chain
+        postCooldown = true;
+        clearTimeout(cooldownTimer);
+        cooldownTimer = setTimeout(() => { postCooldown = false; }, 500);
+      }
     }
     snapRaf = requestAnimationFrame(tick);
   }
@@ -1456,22 +1464,27 @@
     const wEnd = wTop + (N - 1) * stepPx;
     const sy   = window.scrollY;
 
-    // Only intercept while inside the stepper range
     if (sy < wTop - 4 || sy > wEnd + 4) return;
 
     const dir     = e.deltaY > 0 ? 1 : -1;
     const current = Math.round(rawP);
 
-    // At edges, let native scroll carry the user out
     if (dir === -1 && current <= 0) return;
     if (dir ===  1 && current >= N - 1) return;
 
     e.preventDefault();
-    if (snapCooldown || snapAnimating) return;
+
+    // While animating or in post-snap cooldown, extend the cooldown window
+    // on every incoming wheel event (debounce) so a fast gesture can't slip through
+    if (snapAnimating || postCooldown) {
+      if (postCooldown) {
+        clearTimeout(cooldownTimer);
+        cooldownTimer = setTimeout(() => { postCooldown = false; }, 500);
+      }
+      return;
+    }
 
     snapToStep(current + dir);
-    snapCooldown = true;
-    setTimeout(() => { snapCooldown = false; }, 600);
   }, { passive: false });
 
   /* ── Keyboard nav ── */
